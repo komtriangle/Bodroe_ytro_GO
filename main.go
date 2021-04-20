@@ -10,14 +10,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type Training struct{
-    Id int  `gorm:"primaryKey"`
-    TrainingName string
-    Text string
-    Photo string
-    Time string
-}
-
 
 func hello(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, "hello")
@@ -35,8 +27,9 @@ func main(){
   dialect := os.Getenv("DIALECT")
   db, err = gorm.Open(dialect, database)
 
-
-  handler := CreateHandler(db)
+  
+  repo := Handler{db}
+  httpHandler := HttpHandler{repo}
   
   if(err!=nil){
     log.Fatal(err)
@@ -51,8 +44,8 @@ func main(){
 
   router := mux.NewRouter()
 
-  router.HandleFunc("/training", handler.CreateTraining).Methods("POST")
-  router.HandleFunc("/trainings", handler.GetTrainings).Methods("GET")
+  router.HandleFunc("/training", httpHandler.CreateTraining).Methods("POST")
+  router.HandleFunc("/trainings", httpHandler.GetTrainings).Methods("GET")
 
 
   log.Fatal(http.ListenAndServe(":8080", router))
