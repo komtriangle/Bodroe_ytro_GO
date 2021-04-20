@@ -1,22 +1,14 @@
+package main
 
-func hello(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "hello")
-  }
+import (
+	"github.com/jinzhu/gorm"
+)
 
-func create_training(w http.ResponseWriter, r *http.Request){
-	var training Training
-	json.NewDecoder(r.Body).Decode(&training)
-  
-  
-	fmt.Println(training)
-	db.Create(&training)
-  }
-  
-  func get_trainings(w http.ResponseWriter, r *http.Request){
-	  var training []Training
-	
-	  db.Find(&training)
-	
-	  json.NewEncoder(w).Encode(&training)
-  }
-  
+type Handler struct {
+	db *gorm.DB
+}
+
+
+func CreateHandler(db_ *gorm.DB) *Handler{
+	return &Handler{db: db_}
+}

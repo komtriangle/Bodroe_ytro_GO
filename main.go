@@ -50,6 +50,9 @@ func main(){
   database := os.Getenv("DATABASE_URL")
   dialect := os.Getenv("DIALECT")
   db, err = gorm.Open(dialect, database)
+
+
+  handler := CreateHandler(db)
   
   if(err!=nil){
     log.Fatal(err)
