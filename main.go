@@ -1,7 +1,6 @@
 package main
 
 import (
-  "encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
 type Training struct{
     Id int  `gorm:"primaryKey"`
     TrainingName string
@@ -23,26 +23,10 @@ func hello(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, "hello")
   }
 
-func create_training(w http.ResponseWriter, r *http.Request){
-	var training Training
-	json.NewDecoder(r.Body).Decode(&training)
-  
-  
-	fmt.Println(training)
-	db.Create(&training)
-  }
-  
-  func get_trainings(w http.ResponseWriter, r *http.Request){
-	  var training []Training
-	
-	  db.Find(&training)
-	
-	  json.NewEncoder(w).Encode(&training)
-  }
-  
 
 var db *gorm.DB
 var err error
+var handler Handler
 
 
 func main(){
@@ -67,8 +51,8 @@ func main(){
 
   router := mux.NewRouter()
 
-  router.HandleFunc("/training", create_training).Methods("POST")
-  router.HandleFunc("/trainings", get_trainings).Methods("GET")
+  router.HandleFunc("/training", handler.CreateTraining).Methods("POST")
+  router.HandleFunc("/trainings", handler.GetTrainings).Methods("GET")
 
 
   log.Fatal(http.ListenAndServe(":8080", router))
