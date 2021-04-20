@@ -6,7 +6,9 @@ import (
 
 type Repository interface{
 	InsertTranining(training *Training) 
-	GetAllTrainings() []Training
+	GetAllTrainings() ([]Training, error)
+	InsertTrainingGroup(trainingGroup *TrainingGroup) (bool, error)
+	GetAllTrainingGroups() ([]TrainingGroup, error)
 }
 
 type Handler struct {
@@ -29,9 +31,28 @@ func (h Handler) InsertTranining(training *Training){
 	}
 }
 
-func (h Handler) GetAllTrainings() []Training{
+func (h Handler) GetAllTrainings() ([]Training, error){
 	var training []Training
-	h.db.Find(&training)
-	return training
+	err := h.db.Find(&training).Error
+	return training, err
+}
+
+func(h Handler) InsertTrainingGroup(trainingGroup *TrainingGroup) (bool, error){
+	res, err :=trainingGroup.Validate()
+	if(!res){
+		return res, err
+	}
+	results := h.db.Create(&trainingGroup)
+	if(results.Error != nil){
+		return res, results.Error
+	}
+	return true, nil
+}
+
+func(h Handler) GetAllTrainingGroups() ([]TrainingGroup, error){
+	var trainingGroups []TrainingGroup
+	err = h.db.Find(&trainingGroups).Error
+
+	return trainingGroups, err
 }
 

@@ -8,3 +8,10 @@ type Training struct{
     Photo string
     Time string
 }
+
+type TrainingGroup struct{
+	Id int  `gorm:"primaryKey"`
+	Name string
+	ShortDescription string
+	Description string
+}

@@ -20,3 +20,16 @@ func(train *Training) Validate() (bool, error){
 	}
 	return true, nil
 }
+
+func(trainingGroup *TrainingGroup) Validate() (bool, error){
+	if trainingGroup.Name == ""{
+		return false, errors.New("Required Name")
+	}
+	if trainingGroup.ShortDescription == ""{
+		return false, errors.New("Required ShortDescription")
+	}
+	if trainingGroup.Description == ""{
+		return false, errors.New("Required Description")
+	}
+	return true, nil
+}
