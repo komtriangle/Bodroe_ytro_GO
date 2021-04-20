@@ -9,6 +9,7 @@ type Repository interface{
 	GetAllTrainings() ([]Training, error)
 	InsertTrainingGroup(trainingGroup *TrainingGroup) (bool, error)
 	GetAllTrainingGroups() ([]TrainingGroup, error)
+	InsertTrainRelatTG(trainRelatTG *TrainingRelationTrainingGroup) (bool, error)
 }
 
 type Handler struct {
@@ -54,5 +55,14 @@ func(h Handler) GetAllTrainingGroups() ([]TrainingGroup, error){
 	err = h.db.Find(&trainingGroups).Error
 
 	return trainingGroups, err
+}
+
+func(h Handler) InsertTrainRelatTG (trainRelatTG *TrainingRelationTrainingGroup) (bool ,error){
+	
+	err := h.db.Create(&trainRelatTG).Error
+	if(err!=nil){
+		return false, err
+	}
+	return true, nil
 }
 

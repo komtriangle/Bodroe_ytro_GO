@@ -7,6 +7,7 @@ type Training struct{
     Text string
     Photo string
     Time string
+	TrainRelatTG []TrainingRelationTrainingGroup `gorm:"FOREIGNKEY:Training_Id;ASSOCIATION_FOREIGNKEY:id"`
 }
 
 type TrainingGroup struct{
@@ -14,4 +15,11 @@ type TrainingGroup struct{
 	Name string
 	ShortDescription string
 	Description string
+	TrainRelatTG []TrainingRelationTrainingGroup `gorm:"FOREIGNKEY:Training_Group_Id;ASSOCIATION_FOREIGNKEY:id"`
+}
+
+type TrainingRelationTrainingGroup struct {
+	Id int  `gorm:"primaryKey"`
+	TrainingId int
+	TrainingGroupId int 
 }

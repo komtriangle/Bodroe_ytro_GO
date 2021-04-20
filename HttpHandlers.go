@@ -50,3 +50,16 @@ func(h *HttpHandler) GetAllTrainingGroups(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(&trainingGroups)
 	w.WriteHeader(http.StatusOK)
 }
+
+func(h *HttpHandler) CreateTrainRelatTrainGroup (w http.ResponseWriter, r *http.Request){
+	var TrainRelateTG TrainingRelationTrainingGroup
+	json.NewDecoder(r.Body).Decode(&TrainRelateTG)
+	res, err := h.Repo.InsertTrainRelatTG(&TrainRelateTG)
+
+	if(!res){
+		panic(err)
+		w.WriteHeader(http.StatusBadRequest)
+	}else{
+		w.WriteHeader(http.StatusOK)
+	}
+}
