@@ -33,3 +33,13 @@ func(trainingGroup *TrainingGroup) Validate() (bool, error){
 	}
 	return true, nil
 }
+
+func(trainRelatTG *TrainingRelationTrainingGroup) Validate() (bool, error){
+	if trainRelatTG.TrainingId <= 0 {
+		return false, errors.New("Training id required must be greater than 0")
+	}
+	if trainRelatTG.TrainingGroupId <= 0{
+		return false, errors.New("Training group id required and must be greater than 0")
+	}
+	return true, nil
+}

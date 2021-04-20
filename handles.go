@@ -58,8 +58,11 @@ func(h Handler) GetAllTrainingGroups() ([]TrainingGroup, error){
 }
 
 func(h Handler) InsertTrainRelatTG (trainRelatTG *TrainingRelationTrainingGroup) (bool ,error){
-	
-	err := h.db.Create(&trainRelatTG).Error
+	res, err := trainRelatTG.Validate()
+	if(!res){
+		return false, err
+	}
+	err = h.db.Create(&trainRelatTG).Error
 	if(err!=nil){
 		return false, err
 	}
