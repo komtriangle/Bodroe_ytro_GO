@@ -8,7 +8,6 @@ import (
   "github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-  "./Repositories"
 )
 
 
@@ -19,7 +18,6 @@ func hello(w http.ResponseWriter, r *http.Request){
 
 var db *gorm.DB
 var err error
-var handler Handler
 
 func GetDB() *gorm.DB{
   return db
@@ -33,9 +31,13 @@ func main(){
   db, err = gorm.Open(dialect, database)
 
   
-  repo := Handler{db}
-  //userRepo := NewUserRepository()
-  httpHandler := HttpHandler{repo}
+  userRepo := NewUserRepository()
+  progressRepo := NewProgressRepository()
+  trainingRepo := NewTrainingRepository()
+  trainingGroupRepo := NewTrainingGroupRepository()
+  trainRelTG :=NewTrainRelatTrainGroupRepository()
+  httpHandler := HttpHandler{userRepo, progressRepo, trainingRepo, trainingGroupRepo,trainRelTG}
+
   
   if(err!=nil){
     log.Fatal(err)
@@ -63,8 +65,10 @@ func main(){
   router.HandleFunc("/TrainingGroups", httpHandler.GetAllTrainingGroups).Methods("GET")
   router.HandleFunc("/TrainingRelationTrainingGroup", httpHandler.CreateTrainRelatTrainGroup).Methods("POST")
   router.HandleFunc("/TrainingsFromGroup/{id:[0-9]+}", httpHandler.GetTrainingsFromGroup).Methods("GET")
-  //router.HandleFunc("/User", httpHandler.CreateUser).Methods("POST")
-  
+  router.HandleFunc("/User", httpHandler.CreateUser).Methods("POST")
+  router.HandleFunc("/Users", httpHandler.GetAllUsers).Methods("GET")
+  router.HandleFunc("/Progress", httpHandler.CreateProgress).Methods("POST")
+  router.HandleFunc("/Progresses", httpHandler.GetAllProgresses).Methods("GET")
 
 
   log.Fatal(http.ListenAndServe(":8080", router))

@@ -43,3 +43,23 @@ func(trainRelatTG *TrainingRelationTrainingGroup) Validate() (bool, error){
 	}
 	return true, nil
 }
+
+func (user *User) Validate() (bool, error){
+	if user.Name == "" {
+		return false, errors.New("Name is required")
+	}
+	if user.Age <= 0{
+		return false, errors.New("Age required and must be greater than 0")
+	}
+	return true, nil
+}
+
+func (progress *Progress) Validate() (bool, error){
+	if progress.UserToken == "" {
+		return false, errors.New("UserToken is required")
+	}
+	if progress.DateTime.IsZero(){
+		return false, errors.New("DateTime is required")
+	}
+	return true, nil
+}
