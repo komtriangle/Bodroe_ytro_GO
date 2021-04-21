@@ -38,8 +38,6 @@ func main(){
   }
 
   defer db.Close()
-
-  db.Exec("PRAGMA foreign_keys = ON")
   db.AutoMigrate(&Training{})
   db.AutoMigrate(&TrainingGroup{})
   db.AutoMigrate(&TrainingRelationTrainingGroup{})
@@ -55,6 +53,7 @@ func main(){
   router.HandleFunc("/TrainingGroup", httpHandler.CreateTrainingGroup).Methods("POST")
   router.HandleFunc("/TrainingGroups", httpHandler.GetAllTrainingGroups).Methods("GET")
   router.HandleFunc("/TrainingRelationTrainingGroup", httpHandler.CreateTrainRelatTrainGroup).Methods("POST")
+  router.HandleFunc("/TrainingsFromGroup/{id:[0-9]+}", httpHandler.GetTrainingsFromGroup).Methods("GET")
 
 
   log.Fatal(http.ListenAndServe(":8080", router))

@@ -10,6 +10,7 @@ type Repository interface{
 	InsertTrainingGroup(trainingGroup *TrainingGroup) (bool, error)
 	GetAllTrainingGroups() ([]TrainingGroup, error)
 	InsertTrainRelatTG(trainRelatTG *TrainingRelationTrainingGroup) (bool, error)
+	GetTrainingsFromGroup(Id int) ([]Training, error)
 }
 
 type Handler struct {
@@ -69,3 +70,12 @@ func(h Handler) InsertTrainRelatTG (trainRelatTG *TrainingRelationTrainingGroup)
 	return true, nil
 }
 
+
+func (h Handler) GetTrainingsFromGroup(Id int) ([]Training, error){
+	var res []Training
+	 err := h.db.Joins("JOIN training_relation_training_groups ON training_relation_training_groups.training_id = trainings.id and training_relation_training_groups.training_group_id= ?", Id).Find(&res).Error
+	 if(err!=nil){
+		 return res, err
+	 }
+	 return res, nil
+}

@@ -2,6 +2,8 @@ package main
 
 
 import (
+	"strconv"
+	"github.com/gorilla/mux"
 	"encoding/json"
 	"net/http"
 )
@@ -62,4 +64,16 @@ func(h *HttpHandler) CreateTrainRelatTrainGroup (w http.ResponseWriter, r *http.
 	}else{
 		w.WriteHeader(http.StatusOK)
 	}
+}
+
+func (h *HttpHandler) GetTrainingsFromGroup (w http.ResponseWriter, r *http.Request){
+	vars := mux.Vars(r)
+    id, _ := strconv.Atoi(vars["id"])
+	res, err := h.Repo.GetTrainingsFromGroup(id)
+	if(err!=nil){
+		panic(err)
+	}
+	json.NewEncoder(w).Encode(&res)
+	w.WriteHeader(http.StatusOK)
+
 }
