@@ -11,6 +11,7 @@ import (
 
 type HttpHandler struct{
 	 Repo Repository
+	 UserRepo UserIRepository
 }
 
 
@@ -75,5 +76,17 @@ func (h *HttpHandler) GetTrainingsFromGroup (w http.ResponseWriter, r *http.Requ
 	}
 	json.NewEncoder(w).Encode(&res)
 	w.WriteHeader(http.StatusOK)
+}
 
+func(h *HttpHandler) CreateUser (w http.ResponseWriter, r *http.Request){
+	var user User
+	json.NewDecoder(r.Body).Decode(&user)
+	res, err := h.UserRepo.Insert(&user)
+
+	if(!res){
+		panic(err)
+		w.WriteHeader(http.StatusBadRequest)
+	}else{
+		w.WriteHeader(http.StatusOK)
+	}
 }

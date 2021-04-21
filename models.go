@@ -1,5 +1,7 @@
 package main
 
+import( "time")
+
 
 type Training struct{
     Id int  `gorm:"primaryKey"`
@@ -22,4 +24,17 @@ type TrainingRelationTrainingGroup struct {
 	Id int  `gorm:"primaryKey"`
 	TrainingId int
 	TrainingGroupId int 
+}
+
+type User struct {
+	Id string `gorm:"primaryKey"`
+	Name string 
+	Age int
+	Progress []Progress `gorm:"FOREIGNKEY:User_Token;ASSOCIATION_FOREIGNKEY:id"`
+}
+
+type Progress struct {
+	Id int  `gorm:"primaryKey"`
+	UserToken string
+	DateTime time.Time 
 }

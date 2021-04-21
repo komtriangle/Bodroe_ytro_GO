@@ -13,6 +13,7 @@ type Repository interface{
 	GetTrainingsFromGroup(Id int) ([]Training, error)
 }
 
+
 type Handler struct {
 	db *gorm.DB
 }
