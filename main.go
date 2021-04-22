@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-  "os"
 	"net/http"
   "github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -26,9 +25,9 @@ func GetDB() *gorm.DB{
 
 func main(){
   
-  database := os.Getenv("DATABASE_URL")
-  dialect := os.Getenv("DIALECT")
-  db, err = gorm.Open(dialect, database)
+  //database := os.Getenv("DATABASE_URL")
+  //dialect := os.Getenv("DIALECT")
+  db, err = gorm.Open("postgres", "postgresql://postgres:1234@localhost/bodroe_ytro_GO?sslmode=disable")
 
   
   userRepo := NewUserRepository()
