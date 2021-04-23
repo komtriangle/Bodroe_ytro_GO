@@ -1,15 +1,13 @@
 package repositories
 
-
-import(
+import (
 	"github.com/jinzhu/gorm"
+	"github.com/komtriangle/Bodroe_ytro_GO/db"
 )
 
-
-
-type UserIRepository interface{
+type UserIRepository interface {
 	Insert(user *User) (bool, error)
-	GetAll() ([]User, error)	
+	GetAll() ([]User, error)
 }
 
 type UserRepository struct {
@@ -17,22 +15,22 @@ type UserRepository struct {
 }
 
 func NewUserRepository() *UserRepository {
-	return &UserRepository{GetDB()}
+	return &UserRepository{db.GetDB()}
 }
 
-func (u UserRepository) Insert(user *User) (bool, error){
+func (u UserRepository) Insert(user *User) (bool, error) {
 	res, err := user.Validate()
-	if(!res){
+	if !res {
 		return false, err
 	}
 	err = u.db.Create(&user).Error
-	if(err!=nil){
+	if err != nil {
 		return false, err
 	}
 	return true, nil
-} 
+}
 
-func(u UserRepository) GetAll() ([]User, error){
+func (u UserRepository) GetAll() ([]User, error) {
 	var users []User
 	err := u.db.Find(&users).Error
 	return users, err

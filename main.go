@@ -5,13 +5,16 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
+	"github.com/komtriangle/Bodroe_ytro_GO/db"
 	"github.com/komtriangle/Bodroe_ytro_GO/repositories"
 )
 
 func main() {
 
-	repositories.InitDB()
-	defer repositories.CloseDB()
+	db.ConnectDB()
+	MigrateDB()
+	defer db.CloseDB()
 
 	userRepo := repositories.NewUserRepository()
 	progressRepo := repositories.NewProgressRepository()
@@ -34,4 +37,18 @@ func main() {
 	router.HandleFunc("/Progresses", httpHandler.GetAllProgresses).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func MigrateDB() {
+	var db *gorm.DB = db.GetDB()
+	db.AutoMigrate(&repositories.Training{})
+	db.AutoMigrate(&repositories.TrainingGroup{})
+	db.AutoMigrate(&repositories.TrainingRelationTrainingGroup{})
+	db.AutoMigrate(&repositories.User{})
+	db.AutoMigrate(&repositories.Progress{})
+
+	db.Model(&repositories.TrainingRelationTrainingGroup{}).AddForeignKey("Training_Id", "Trainings(Id)", "RESTRICT", "RESTRICT")
+	db.Model(&repositories.TrainingRelationTrainingGroup{}).AddForeignKey("Training_Group_Id", "training_groups(Id)", "RESTRICT", "RESTRICT")
+	db.Model(&repositories.Progress{}).AddForeignKey("User_Token", "users(Id)", "RESTRICT", "RESTRICT")
+
 }

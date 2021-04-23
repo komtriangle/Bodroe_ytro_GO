@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/komtriangle/Bodroe_ytro_GO/db"
 )
 
 type ProgressIRepository interface {
@@ -14,7 +15,7 @@ type ProgressRepository struct {
 }
 
 func NewProgressRepository() *ProgressRepository {
-	return &ProgressRepository{GetDB()}
+	return &ProgressRepository{db.GetDB()}
 }
 
 func (p ProgressRepository) Insert(progress *Progress) (bool, error) {
