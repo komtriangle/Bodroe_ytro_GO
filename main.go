@@ -1,17 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/komtriangle/Bodroe_ytro_GO/repositories"
 )
-
-func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello")
-}
 
 func main() {
 

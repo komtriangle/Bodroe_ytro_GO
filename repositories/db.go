@@ -1,8 +1,11 @@
 package repositories
 
 import (
+	"os"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
 )
 
 var db *gorm.DB
@@ -13,9 +16,17 @@ func GetDB() *gorm.DB {
 }
 
 func InitDB() {
-	//database := os.Getenv("DATABASE_URL")
-	//dialect := os.Getenv("DIALECT")
-	db, err = gorm.Open("postgres", "postgresql://postgres:1234@localhost/bodroe_ytro_GO?sslmode=disable")
+	err = godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	database := os.Getenv("DATABASE_URL")
+	dialect := os.Getenv("DIALECT")
+	db, err = gorm.Open(dialect, database)
+
+	if err != nil {
+		panic(err)
+	}
 	db.AutoMigrate(&Training{})
 	db.AutoMigrate(&TrainingGroup{})
 	db.AutoMigrate(&TrainingRelationTrainingGroup{})

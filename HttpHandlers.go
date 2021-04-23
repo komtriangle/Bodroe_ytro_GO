@@ -62,8 +62,8 @@ func (h *HttpHandler) CreateTrainRelatTrainGroup(w http.ResponseWriter, r *http.
 	res, err := h.TrainRelatTG.Insert(&TrainRelateTG)
 
 	if !res {
-		panic(err)
 		w.WriteHeader(http.StatusBadRequest)
+		panic(err)
 	} else {
 		w.WriteHeader(http.StatusOK)
 	}
@@ -85,8 +85,8 @@ func (h *HttpHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&user)
 	res, err := h.UserRepo.Insert(&user)
 	if !res {
-		panic(err)
 		w.WriteHeader(http.StatusBadRequest)
+		panic(err)
 	} else {
 		w.WriteHeader(http.StatusOK)
 	}
@@ -107,8 +107,8 @@ func (h *HttpHandler) CreateProgress(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&progress)
 	res, err := h.ProgressRepo.Insert(&progress)
 	if !res {
-		panic(err)
 		w.WriteHeader(http.StatusBadRequest)
+		panic(err)
 	} else {
 		w.WriteHeader(http.StatusOK)
 	}
