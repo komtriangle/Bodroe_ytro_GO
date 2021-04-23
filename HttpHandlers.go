@@ -23,9 +23,10 @@ func (h *HttpHandler) CreateTraining(w http.ResponseWriter, r *http.Request) {
 	res, _ := h.TrainingRepo.Insert(&training)
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		json.NewEncoder(w).Encode(&training)
+		w.WriteHeader(http.StatusCreated)
 	}
-	json.NewEncoder(w).Encode(&training)
-	w.WriteHeader(http.StatusCreated)
 
 }
 
