@@ -20,10 +20,11 @@ type HttpHandler struct {
 func (h *HttpHandler) CreateTraining(w http.ResponseWriter, r *http.Request) {
 	var training repositories.Training
 	json.NewDecoder(r.Body).Decode(&training)
-	res, _ := h.TrainingRepo.Insert(&training)
+	res, err := h.TrainingRepo.Insert(&training)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&training)
 		w.WriteHeader(http.StatusCreated)
@@ -37,6 +38,7 @@ func (h *HttpHandler) GetTrainings(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 
 	} else {
 		json.NewEncoder(w).Encode(&training)
@@ -48,10 +50,11 @@ func (h *HttpHandler) GetTrainings(w http.ResponseWriter, r *http.Request) {
 func (h *HttpHandler) CreateTrainingGroup(w http.ResponseWriter, r *http.Request) {
 	var trainingGroup repositories.TrainingGroup
 	json.NewDecoder(r.Body).Decode(&trainingGroup)
-	res, _ := h.TrainingGroupRepo.Insert(&trainingGroup)
+	res, err := h.TrainingGroupRepo.Insert(&trainingGroup)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 
 	} else {
 		json.NewEncoder(w).Encode(&trainingGroup)
@@ -65,6 +68,7 @@ func (h *HttpHandler) GetAllTrainingGroups(w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 
 	} else {
 		json.NewEncoder(w).Encode(&trainingGroups)
@@ -76,10 +80,11 @@ func (h *HttpHandler) GetAllTrainingGroups(w http.ResponseWriter, r *http.Reques
 func (h *HttpHandler) CreateTrainRelatTrainGroup(w http.ResponseWriter, r *http.Request) {
 	var TrainRelateTG repositories.TrainingRelationTrainingGroup
 	json.NewDecoder(r.Body).Decode(&TrainRelateTG)
-	res, _ := h.TrainRelatTG.Insert(&TrainRelateTG)
+	res, err := h.TrainRelatTG.Insert(&TrainRelateTG)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&TrainRelateTG)
 		w.WriteHeader(http.StatusOK)
@@ -89,10 +94,11 @@ func (h *HttpHandler) CreateTrainRelatTrainGroup(w http.ResponseWriter, r *http.
 func (h *HttpHandler) GetTrainingsFromGroup(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	res, _ := h.TrainingRepo.GetByGroupId(id)
+	res, err := h.TrainingRepo.GetByGroupId(id)
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&res)
 		w.WriteHeader(http.StatusOK)
@@ -102,10 +108,11 @@ func (h *HttpHandler) GetTrainingsFromGroup(w http.ResponseWriter, r *http.Reque
 func (h *HttpHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user repositories.User
 	json.NewDecoder(r.Body).Decode(&user)
-	res, _ := h.UserRepo.Insert(&user)
+	res, err := h.UserRepo.Insert(&user)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&user)
 		w.WriteHeader(http.StatusOK)
@@ -118,6 +125,7 @@ func (h *HttpHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&users)
 		w.WriteHeader(http.StatusOK)
@@ -127,10 +135,11 @@ func (h *HttpHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 func (h *HttpHandler) CreateProgress(w http.ResponseWriter, r *http.Request) {
 	var progress repositories.Progress
 	json.NewDecoder(r.Body).Decode(&progress)
-	res, _ := h.ProgressRepo.Insert(&progress)
+	res, err := h.ProgressRepo.Insert(&progress)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&progress)
 		w.WriteHeader(http.StatusOK)
@@ -143,6 +152,7 @@ func (h *HttpHandler) GetAllProgresses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
 	} else {
 		json.NewEncoder(w).Encode(&progresses)
 		w.WriteHeader(http.StatusOK)
