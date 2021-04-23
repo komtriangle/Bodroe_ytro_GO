@@ -10,9 +10,14 @@ import (
 	"github.com/komtriangle/Bodroe_ytro_GO/repositories"
 )
 
+var err error
+
 func main() {
 
-	db.ConnectDB()
+	err = db.ConnectDB()
+	if err != nil {
+		panic(err)
+	}
 	MigrateDB()
 	defer db.CloseDB()
 

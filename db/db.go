@@ -15,7 +15,7 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-func ConnectDB() {
+func ConnectDB() error {
 	err = godotenv.Load()
 	if err != nil {
 		panic(err)
@@ -23,10 +23,8 @@ func ConnectDB() {
 	database := os.Getenv("DATABASE_URL")
 	dialect := os.Getenv("DIALECT")
 	db, err = gorm.Open(dialect, database)
+	return err
 
-	if err != nil {
-		panic(err)
-	}
 }
 
 func CloseDB() {
