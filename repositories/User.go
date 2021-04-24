@@ -1,37 +1,37 @@
 package repositories
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/komtriangle/Bodroe_ytro_GO/db"
+	"github.com/komtriangle/Bodroe_ytro_GO/models"
 )
 
 type UserIRepository interface {
-	Insert(user *User) (bool, error)
-	GetAll() ([]User, error)
+	Insert(user *models.User) (bool, error)
+	GetAll() ([]models.User, error)
 }
 
 type UserRepository struct {
-	db *gorm.DB
+	db db.Database
 }
 
-func NewUserRepository() *UserRepository {
-	return &UserRepository{db.GetDB()}
+func NewUserRepository(database db.Database) *UserRepository {
+	return &UserRepository{database}
 }
 
-func (u UserRepository) Insert(user *User) (bool, error) {
+func (u UserRepository) Insert(user *models.User) (bool, error) {
 	res, err := user.Validate()
 	if !res {
 		return false, err
 	}
-	err = u.db.Create(&user).Error
-	if err != nil {
+	res, err = u.db.CreateUser(user)
+	if !res {
 		return false, err
 	}
 	return true, nil
 }
 
-func (u UserRepository) GetAll() ([]User, error) {
-	var users []User
-	err := u.db.Find(&users).Error
+func (u UserRepository) GetAll() ([]models.User, error) {
+	var users []models.User
+	users, err := u.db.GetAllUsers()
 	return users, err
 }

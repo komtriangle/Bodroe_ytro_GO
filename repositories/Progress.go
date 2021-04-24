@@ -1,37 +1,37 @@
 package repositories
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/komtriangle/Bodroe_ytro_GO/db"
+	"github.com/komtriangle/Bodroe_ytro_GO/models"
 )
 
 type ProgressIRepository interface {
-	Insert(progress *Progress) (bool, error)
-	GetAll() ([]Progress, error)
+	Insert(progress *models.Progress) (bool, error)
+	GetAll() ([]models.Progress, error)
 }
 
 type ProgressRepository struct {
-	db *gorm.DB
+	db db.Database
 }
 
-func NewProgressRepository() *ProgressRepository {
-	return &ProgressRepository{db.GetDB()}
+func NewProgressRepository(database db.Database) *ProgressRepository {
+	return &ProgressRepository{database}
 }
 
-func (p ProgressRepository) Insert(progress *Progress) (bool, error) {
+func (p ProgressRepository) Insert(progress *models.Progress) (bool, error) {
 	res, err := progress.Validate()
 	if !res {
 		return false, err
 	}
-	err = p.db.Create(&progress).Error
-	if err != nil {
+	res, err = p.db.CreateProgress(progress)
+	if !res {
 		return false, err
 	}
 	return true, nil
 }
 
-func (p ProgressRepository) GetAll() ([]Progress, error) {
-	var progresses []Progress
-	err := p.db.Find(&progresses).Error
+func (p ProgressRepository) GetAll() ([]models.Progress, error) {
+	var progresses []models.Progress
+	progresses, err := p.db.GetAllProgresses()
 	return progresses, err
 }

@@ -1,37 +1,37 @@
 package repositories
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/komtriangle/Bodroe_ytro_GO/db"
+	"github.com/komtriangle/Bodroe_ytro_GO/models"
 )
 
 type TrainingGroupIRepository interface {
-	Insert(trainingGroup *TrainingGroup) (bool, error)
-	GetAll() ([]TrainingGroup, error)
+	Insert(trainingGroup *models.TrainingGroup) (bool, error)
+	GetAll() ([]models.TrainingGroup, error)
 }
 
 type TrainingGroupRepository struct {
-	db *gorm.DB
+	db db.Database
 }
 
-func NewTrainingGroupRepository() *TrainingGroupRepository {
-	return &TrainingGroupRepository{db.GetDB()}
+func NewTrainingGroupRepository(database db.Database) *TrainingGroupRepository {
+	return &TrainingGroupRepository{database}
 }
 
-func (t TrainingGroupRepository) Insert(trainingGroup *TrainingGroup) (bool, error) {
+func (t TrainingGroupRepository) Insert(trainingGroup *models.TrainingGroup) (bool, error) {
 	res, err := trainingGroup.Validate()
 	if !res {
 		return false, err
 	}
-	err = t.db.Create(&trainingGroup).Error
-	if err != nil {
+	res, err = t.db.CreateTrainingGroup(trainingGroup)
+	if !res {
 		return false, err
 	}
 	return true, nil
 }
 
-func (t TrainingGroupRepository) GetAll() ([]TrainingGroup, error) {
-	var trainingGroup []TrainingGroup
-	err := t.db.Find(&trainingGroup).Error
+func (t TrainingGroupRepository) GetAll() ([]models.TrainingGroup, error) {
+	var trainingGroup []models.TrainingGroup
+	trainingGroup, err := t.db.GetAllTrainingGroups()
 	return trainingGroup, err
 }
