@@ -1,11 +1,8 @@
 package db
 
 import (
-	"os"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/joho/godotenv"
 	"github.com/komtriangle/Bodroe_ytro_GO/models"
 )
 
@@ -21,7 +18,6 @@ type Database interface {
 	GetAllUsers() ([]models.User, error)
 	CreateProgress(progress *models.Progress) (bool, error)
 	GetAllProgresses() ([]models.Progress, error)
-	ConnectDB() error
 	CloseDB()
 	GetDB() *gorm.DB
 }
@@ -30,16 +26,6 @@ type DatabaseGorm struct {
 	DB *gorm.DB
 }
 
-func (d DatabaseGorm) ConnectDB() error {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
-	database := os.Getenv("DATABASE_URL")
-	dialect := os.Getenv("DIALECT")
-	d.DB, err = gorm.Open(dialect, database)
-	return err
-}
 func (d DatabaseGorm) GetDB() *gorm.DB {
 	return d.DB
 }
