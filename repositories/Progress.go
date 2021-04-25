@@ -8,6 +8,7 @@ import (
 type ProgressIRepository interface {
 	Insert(progress *models.Progress) (bool, error)
 	GetAll() ([]models.Progress, error)
+	GetProgressByUser(Id string) (models.ProgressbyUser, error)
 }
 
 type ProgressRepository struct {
@@ -34,4 +35,9 @@ func (p ProgressRepository) GetAll() ([]models.Progress, error) {
 	var progresses []models.Progress
 	progresses, err := p.db.GetAllProgresses()
 	return progresses, err
+}
+func (p ProgressRepository) GetProgressByUser(Id string) (models.ProgressbyUser, error) {
+	var progressByUser models.ProgressbyUser
+	progressByUser, err := p.db.GetProgressByUser(Id)
+	return progressByUser, err
 }

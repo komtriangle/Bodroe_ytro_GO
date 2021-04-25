@@ -1,6 +1,8 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/komtriangle/Bodroe_ytro_GO/models"
@@ -18,6 +20,7 @@ type Database interface {
 	GetAllUsers() ([]models.User, error)
 	CreateProgress(progress *models.Progress) (bool, error)
 	GetAllProgresses() ([]models.Progress, error)
+	GetProgressByUser(Id string) (models.ProgressbyUser, error)
 	CloseDB()
 	GetDB() *gorm.DB
 }
@@ -111,4 +114,15 @@ func (d DatabaseGorm) GetAllProgresses() ([]models.Progress, error) {
 	var progresses []models.Progress
 	err := d.DB.Find(&progresses).Error
 	return progresses, err
+}
+func (d DatabaseGorm) GetProgressByUser(Id string) (models.ProgressbyUser, error) {
+	var countTrainings, countDaysWithTrainings int
+	countDaysWithTrainingsRow := 0
+	fmt.Println(Id)
+	d.DB.Model(&models.Progress{}).Where("user_token = ?", Id).Count(&countTrainings)
+	d.DB.Model(&models.Progress{}).Where("user_token = ?", Id).Group("date_time").Count(&countDaysWithTrainings)
+	return models.ProgressbyUser{CountTraining: countTrainings,
+		CountDaysWithTrainings: countDaysWithTrainings,
+		DaysTrainingRow:        countDaysWithTrainingsRow}, nil
+
 }

@@ -40,3 +40,8 @@ type Progress struct {
 	UserToken string
 	DateTime  time.Time
 }
+type ProgressbyUser struct {
+	CountTraining          int
+	CountDaysWithTrainings int
+	DaysTrainingRow        int
+}
