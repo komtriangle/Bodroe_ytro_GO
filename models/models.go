@@ -18,6 +18,7 @@ type TrainingGroup struct {
 	Name             string
 	ShortDescription string
 	Description      string
+	Image            string
 	TrainRelatTG     []TrainingRelationTrainingGroup `gorm:"FOREIGNKEY:Training_Group_Id;ASSOCIATION_FOREIGNKEY:id"`
 }
 

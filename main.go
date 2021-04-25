@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
@@ -53,7 +54,7 @@ func main() {
 	router.HandleFunc("/Progress", httpHandler.CreateProgress).Methods("POST")
 	router.HandleFunc("/Progresses", httpHandler.GetAllProgresses).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(router)))
 }
 
 func MigrateDB(database db.Database) {

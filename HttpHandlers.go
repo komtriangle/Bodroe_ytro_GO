@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/komtriangle/Bodroe_ytro_GO/models"
@@ -134,9 +136,19 @@ func (h *HttpHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HttpHandler) CreateProgress(w http.ResponseWriter, r *http.Request) {
-	var progress models.Progress
+	var progress struct {
+		Id        int
+		UserToken string
+		DateTime  string
+	}
 	json.NewDecoder(r.Body).Decode(&progress)
-	res, err := h.ProgressRepo.Insert(&progress)
+	fmt.Println(progress.DateTime)
+	DateTime, err := time.Parse("2006-01-02", progress.DateTime)
+	if err != nil {
+		panic(err)
+	}
+	progress_With_Date := models.Progress{Id: progress.Id, UserToken: progress.UserToken, DateTime: DateTime}
+	res, err := h.ProgressRepo.Insert(&progress_With_Date)
 	w.Header().Set("Content-Type", "application/json")
 	if !res {
 		w.WriteHeader(http.StatusBadRequest)

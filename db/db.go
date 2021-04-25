@@ -53,7 +53,7 @@ func (d DatabaseGorm) GetAllTrainings() ([]models.Training, error) {
 
 func (d DatabaseGorm) GetTrainingByGroupId(id int) ([]models.Training, error) {
 	var trainings []models.Training
-	err := d.DB.Joins("JOIN training_relation_training_groups tr ON training_relation_training_groups.training_id = trainings.id and training_relation_training_groups.training_group_id= ?", id).Find(&trainings).Error
+	err := d.DB.Joins("JOIN training_relation_training_groups ON training_relation_training_groups.training_id = trainings.id and training_relation_training_groups.training_group_id= ?", id).Find(&trainings).Error
 	if err != nil {
 		return nil, err
 	}
