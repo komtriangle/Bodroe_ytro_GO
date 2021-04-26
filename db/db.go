@@ -1,8 +1,6 @@
 package db
 
 import (
-	"fmt"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/komtriangle/Bodroe_ytro_GO/models"
@@ -118,9 +116,21 @@ func (d DatabaseGorm) GetAllProgresses() ([]models.Progress, error) {
 func (d DatabaseGorm) GetProgressByUser(Id string) (models.ProgressbyUser, error) {
 	var countTrainings, countDaysWithTrainings int
 	countDaysWithTrainingsRow := 0
-	fmt.Println(Id)
 	d.DB.Model(&models.Progress{}).Where("user_token = ?", Id).Count(&countTrainings)
 	d.DB.Model(&models.Progress{}).Where("user_token = ?", Id).Group("date_time").Count(&countDaysWithTrainings)
+	// dates, _ := d.DB.Model(&models.Progress{}).Where("user_token = ?", Id).Group("date_time").Select("date_time").Rows()
+	// checkDate := time.Now()
+	// fmt.Println(len(ProgressesByUser))
+	// fmt.Println(dates)
+	// for i := len(ProgressesByUser) - 1; i >= 0; i-- {
+	// 	if checkDate.Format("2006-02-01") != ProgressesByUser[i].DateTime.Format("2006-02-01") {
+	// 		fmt.Println(checkDate.Format("2006-02-01"))
+	// 		fmt.Println(ProgressesByUser[i].DateTime.Format("2006-02-01"))
+	// 		break
+	// 	}
+	// 	countDaysWithTrainingsRow++
+	// 	checkDate.Add(time.Hour * (-24))
+	// }
 	return models.ProgressbyUser{CountTraining: countTrainings,
 		CountDaysWithTrainings: countDaysWithTrainings,
 		DaysTrainingRow:        countDaysWithTrainingsRow}, nil

@@ -173,12 +173,9 @@ func (h *HttpHandler) GetAllProgresses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HttpHandler) GetProgressByUser(w http.ResponseWriter, r *http.Request) {
-	var progressbyUser models.ProgressbyUser
-	var IdForProgress struct {
-		UserId string
-	}
-	json.NewDecoder(r.Body).Decode(&IdForProgress)
-	progressbyUser, err := h.ProgressRepo.GetProgressByUser(IdForProgress.UserId)
+	vars := mux.Vars(r)
+	userId, _ := vars["userId"]
+	progressbyUser, err := h.ProgressRepo.GetProgressByUser(userId)
 	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

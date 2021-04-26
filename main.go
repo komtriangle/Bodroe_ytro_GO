@@ -12,7 +12,6 @@ import (
 	"github.com/komtriangle/Bodroe_ytro_GO/db"
 	"github.com/komtriangle/Bodroe_ytro_GO/models"
 	"github.com/komtriangle/Bodroe_ytro_GO/repositories"
-	"github.com/rs/cors"
 )
 
 func main() {
@@ -53,14 +52,9 @@ func main() {
 	router.HandleFunc("/Users", httpHandler.GetAllUsers).Methods("GET")
 	router.HandleFunc("/Progress", httpHandler.CreateProgress).Methods("POST")
 	router.HandleFunc("/Progresses", httpHandler.GetAllProgresses).Methods("GET")
-	router.HandleFunc("/ProgressByUser", httpHandler.GetProgressByUser).Methods("GET")
+	router.HandleFunc("/ProgressByUser/{userId}", httpHandler.GetProgressByUser).Methods("GET")
 
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
-		AllowCredentials: true,
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", c.Handler(router)))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func MigrateDB(database db.Database) {
